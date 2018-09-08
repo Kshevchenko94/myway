@@ -8,6 +8,7 @@ use yii\widgets\Pjax;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Мои цели';
+
 $this->registerJsFile('/js/goals.js',['depends' => [\yii\web\JqueryAsset::className()]]);
 ?>
 

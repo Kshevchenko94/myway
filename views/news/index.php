@@ -8,6 +8,8 @@ use yii\widgets\ListView;
 
 $this->title = 'Новости';
 \yii\widgets\Pjax::begin(['id'=>'pjax_news', 'enablePushState'=>false]);
+
+$this->registerJsFile('/js/news.js',['depends' => [\yii\web\JqueryAsset::className()]]);
 ?>
 
 <?= $this->render('_form', ['model' => $model]) ?>

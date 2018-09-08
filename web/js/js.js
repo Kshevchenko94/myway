@@ -15,10 +15,10 @@ $(document).ready(function() {
         $(activeTab).fadeIn(); //Исчезновение активного контента
         return false;
     });
+    
+    
 
-    $(document).on('pjax:end', function() {
-        $("[data-toggle='popover-x']").popoverButton();
-    });
+
 
 
 });

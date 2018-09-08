@@ -3,7 +3,9 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->registerJsFile('/js/goals.js',['depends' => [\yii\web\JqueryAsset::className()]]);
+/* @var $stages app\models\Stages */
+/* @var $subStages app\models\Substage */
+
 
 ?>
 <div class="ag_1"><img src="/web/img/addgoal.jpg" alt=""></div>
@@ -43,17 +45,18 @@ $this->registerJsFile('/js/goals.js',['depends' => [\yii\web\JqueryAsset::classN
             \yii\helpers\ArrayHelper::map(\app\models\PrioritiesGoals::getPrioritiesGoals(),'id','name'),['encode'=>false]
         )->label(false);?></div>
     <div class="ag_6"><?=$form->field($model, 'is_public')->checkbox(['label' => 'Не показывать цель людям']);?></div>
-    <?php \yii\widgets\Pjax::begin(['enablePushState'=>false])?>
-    <div class="addplan"><a href="<?=\yii\helpers\Url::to(['/goals/add-stages/',])?>">Добавить план достижения цели</a></div>
-    <?php \yii\widgets\Pjax::end()?>
-    <div class="button add_goal_button"><?=Html::submitButton('Добавить цель');?></div>
-
+    <div class="ag_6"><?=$form->field($model, 'doc')->fileInput()->label(false);?></div>
+    <div class="addplan" onclick="$('.div_stages').toggle()">Добавить план достижения цели</div>
+    <?=$this->render('_stage', ['stages'=>$stages, 'form'=>$form, 'subStages'=>$subStages])?>
+    <div class="button add_goal_button"><?=Html::submitButton('Сохранить цель');?></div>
 </div>
-<div class="ag_7">
-    <div class="ag_addphoto"><img src="/web/img/icon/addphoto.svg" alt=""></div>
 
-        <div><span class="glyphicon glyphicon-remove"></span><?=Html::img('/web/img/uploads/'.$model->doc)?></div>
+    <div class="ag_7">
+        <div class="ag_addphoto"><img src="/web/img/icon/addphoto.svg" alt=""></div>
 
-        <div class="ag_6"><?=$form->field($model, 'doc')->fileInput()->label(false);?></div>
-</div>
+    <?php  if(!$model->isNewRecord && $model->doc): ?>
+        <div><span id="delete_photo_update_goal" class="glyphicon glyphicon-remove"></span><?=Html::img('/web/img/uploads/'.$model->doc)?></div>
+    <?php endif; ?>
+
+    </div>
 <?php ActiveForm::end(); ?>

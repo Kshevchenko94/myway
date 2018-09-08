@@ -72,64 +72,9 @@ $(function(){
         });
     });
 
-    //Редактирование цели
-    $(document).on('blur, change','#form-input-goal-update input, select, textarea',function()
-    {
-        $('#form-input-goal-update').submit();
-        $.pjax.reload({container:'#pjax-form-input-goal-update'});
-    });
 
-    $(document).on('click','#delete_photo_update_goal',function()
-    {
-        $.ajax({
-            url: '/goals/delete-file'+location.search,
-            type: 'POST',
-            success: function(response) {
-                $.pjax.reload({container:'#pjax-form-input-goal-update'});
-            }
-        });
-    });
 
-    $(document).on('click','.update_stages_goal',function(){
 
-        var data = new FormData();
-        var name;
 
-        $.each($('.new_stage').find("input, textarea"), function(index,value){
-
-            //name = $(value).attr('name').replace(/\d/,index);
-            console.log($(value).attr('name'));
-
-            data.append($(value).attr('name'),$(value).val());
-            data.append('goal_id',$('.goal').data('goal_id'));
-        });
-        $.ajax({
-            url: '/goals/add-stages',
-            data:data,
-            type: 'POST',
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                if(response.status)
-                {
-                    $.pjax.reload({container:'#pjax-form-input-goal-update'});
-                }
-            }
-        });
-    });
-
-    jQuery('#multiple-input').on('afterDeleteRow', function(e, row) {
-        $.ajax({
-            url:'/goals/delete-stage',
-            data:{stageId:row.attr('data-stageId')},
-            type:'POST',
-            success:function(response){
-                $.pjax.reload({container:'#pjax-form-input-goal-update'});
-            },
-            error:function(){
-                alert('Error');
-            }
-        });
-    });
 
 });

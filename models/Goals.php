@@ -44,7 +44,7 @@ class Goals extends ActiveRecord
             [['goal', 'date_finish_goal', 'criterion_fifnish_goal', 'id_user','priority_goal', 'is_public', 'need_goal', 'category_goal'], 'required', 'message'=>'Поле обязательное для заполнения'],
             [['date_finish_goal'], 'safe'],
             [['id_user', 'category_goal', 'priority_goal', 'status', 'is_public'], 'integer'],
-            [['goal', 'criterion_fifnish_goal', 'need_goal'], 'string', 'max' => 255],
+            [['goal', 'criterion_fifnish_goal', 'need_goal', 'doc'], 'string', 'max' => 255],
             [['category_goal'], 'exist', 'skipOnError' => true, 'targetClass' => CriteriesGoals::className(), 'targetAttribute' => ['category_goal' => 'id']],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['id_user' => 'id']],
 			[['doc'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, gif, jpeg'],

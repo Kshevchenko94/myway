@@ -8,7 +8,6 @@ use yii\widgets\ActiveForm;
 /* @var $report app\models\News */
 
 $this->title = 'Цель '.$model->goal;
-$this->registerJsFile('/js/goals.js',['depends' => [\yii\web\JqueryAsset::className()]]);
 
 ?>
 <?php \yii\widgets\Pjax::begin(['id'=>"goal_view_".$model->id, 'enablePushState'=>false])?>

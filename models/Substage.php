@@ -58,20 +58,4 @@ class Substage extends \yii\db\ActiveRecord
         return $this->hasOne(Stages::className(), ['id' => 'id_stage']);
     }
 
-    public function saveSubStages(array $data, $stage_id)
-    {
-        die(print_r($data));
-
-        foreach ($data as $substages)
-        {
-            foreach ($substages as $substage)
-            {
-                $this->text = $substage;
-                $this->id_user = Yii::$app->user->id;
-                $this->id_stage = $stage_id;
-                $this->save();
-            }
-
-        }
-    }
 }

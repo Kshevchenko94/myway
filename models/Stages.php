@@ -2,10 +2,8 @@
 
 namespace app\models;
 
-use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
-use yii\base\Model;
 use yii\db\StaleObjectException;
 
 /**
@@ -21,7 +19,7 @@ use yii\db\StaleObjectException;
  * @property Users $goal
  * @property Substage $substages
  */
-class Stages extends \yii\db\ActiveRecord
+class Stages extends ActiveRecord
 {
 
     public function behaviors()
@@ -53,12 +51,12 @@ class Stages extends \yii\db\ActiveRecord
     {
         return [
             [['title', 'date_finish_stage', 'description'], 'required'],
-			[['show_stages'],'boolean'],
             [['date_finish_stage'], 'safe'],
             [['description'], 'string'],
             [['id_user', 'goal_id'], 'integer'],
             [['title'], 'string', 'max' => 255],
-            [['goal_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['goal_id' => 'id']],
+            [['goal_id'], 'exist', 'skipOnError' => true, 'targetClass' => Goals::className(), 'targetAttribute' => ['goal_id' => 'id']],
+            [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_user' => 'id']],
         ];
     }
 
@@ -69,7 +67,7 @@ class Stages extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'title' => 'Title',
+            'title' => 'Название этапа',
             'date_finish_stage' => 'Date Finish Stages',
             'description' => 'Description',
             'id_user' => 'Id User',
@@ -89,23 +87,6 @@ class Stages extends \yii\db\ActiveRecord
     public function getSubstages()
     {
         return $this->hasMany(Substage::className(), ['id' => 'id_stage']);
-    }
-
-    public function saveStages()
-    {
-        for($index = 0;$index <= count(Yii::$app->request->post()['Stages']);$index++)
-        {
-            $modelStage[$index] = [new $this];
-        }
-        if(Model::loadMultiple($modelStage, Yii::$app->request->post()) && Model::validateMultiple($modelStage))
-        {
-            foreach ($modelStage as $key=>$Stage) {
-                $Stage->id_user = Yii::$app->user->id;
-                $Stage->goal_id = Yii::$app->request->post()['goal_id'];
-
-                $Stage->save(false);
-            }
-        }
     }
 
     public static function deleteStage($stageId)

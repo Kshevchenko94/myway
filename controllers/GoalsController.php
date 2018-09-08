@@ -9,6 +9,7 @@ use app\models\Substage;
 use app\models\News;
 use app\models\GoalsSearch;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
@@ -88,11 +89,16 @@ class GoalsController extends ProfileController
     {
         $model = new Goals;
         $Stages = [new Stages()];
-        $subStages = new Substage();
+        $subStages = [[new Substage()]];
 
-        if ($model->load(Yii::$app->request->post())) {
-            die(print_r(Yii::$app->request->post('Stages')));
-			$model->id_user = Yii::$app->user->id;
+        $items = Yii::$app->request->post('Stages');
+        for($i = 0; $i<count($items); $i++){
+            $Stages[$i] = new Stages();
+        }
+
+        if ($model->load(Yii::$app->request->post()) && Model::loadMultiple($Stages, Yii::$app->request->post()) && Model::validateMultiple($Stages)) {
+
+            $model->id_user = Yii::$app->user->id;
 			$model->status = self::ACTIVEGOAL;
 			$model->doc = UploadedFile::getInstance($model, 'doc');
 
@@ -106,25 +112,19 @@ class GoalsController extends ProfileController
 
 			if($model->save())
 			{
-                $items = Yii::$app->request->post('Stages')['Stages'];
-                for($i = 0; $i<count($items); $i++){
-                    $Stages[$i] = new Stages();
+                foreach ($Stages as $key=>$Stage) {
+                    $Stage->id_user = Yii::$app->user->id;
+                    $Stage->goal_id = $model->id;
+                    $Stage->save(false);
                 }
-				if(Model::loadMultiple($Stages, Yii::$app->request->post('Stages')) && Model::validateMultiple($Stages))
-				{
-					foreach ($Stages as $key=>$Stage) {
-                        $Stage->id_user = Yii::$app->user->id;
-                        $Stage->goal_id = $model->id;
-                        $Stage->save(false);
-
-
-                    }
-				}
 				return $this->redirect(['view', 'id' => $model->id]);
 			}
         }
-
-        return $this->render('create', ['model' => $model]);
+        return $this->render('create', [
+            'model' => $model,
+            'stages'=>$Stages,
+            'subStages'=>$subStages,
+        ]);
     }
 
     public function actionUpdateStatus($id,$status)
@@ -151,38 +151,57 @@ class GoalsController extends ProfileController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $Stages = Stages::find()->where(['goal_id'=>$model->id])->indexBy('id')->all();
-        //$Stages = $model->stages;
-
-        //die(print_r($Stages));
-        //$Substages = [new Substage];
+        $Stages = $model->stages;
 
         if ($model->load(Yii::$app->request->post())) {
 
-			$model->doc = UploadedFile::getInstance($model, 'doc');
+            $model->doc = UploadedFile::getInstance($model, 'doc');
+
             if ($model->doc) {
-                Yii::$app->storage->deleteUploadedFile($model->oldAttributes['doc']);
-                $model->doc = Yii::$app->storage->saveUploadedFile($model->doc);
-            }else{
-                $model->doc = $model->oldAttributes['doc'];
-            }
-			if($model->save())
-			{
-                //Model::loadMultiple($Stages, Yii::$app->request->post('Goals')['stages']);
-                //print_r(Yii::$app->request->post('Goals'));
-			    //die();
-                if(Model::loadMultiple($Stages, Yii::$app->request->post('Goals')))
+                $docUrl = Yii::$app->storage->saveUploadedFile($model->doc);
+                if($docUrl)
                 {
-                    foreach ($Stages as $key => $Stage) {
-                        $Stage->save(false);
+                    $model->doc = $docUrl;
+                }
+            }
+
+            $oldIDs = ArrayHelper::map($Stages, 'id', 'id');
+            $Stages = \app\models\Model::createMultiple(Stages::classname(), $Stages);
+            Model::loadMultiple($Stages, Yii::$app->request->post());
+            $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($Stages, 'id', 'id')));
+            // validate all models
+            $valid = $model->validate();
+            $valid = Model::validateMultiple($Stages) && $valid;
+
+            if ($valid) {
+                $transaction = \Yii::$app->db->beginTransaction();
+                try {
+                    if ($flag = $model->save(false)) {
+                        if (! empty($deletedIDs)) {
+                            Stages::deleteAll(['id' => $deletedIDs]);
+                        }
+                        foreach ($Stages as $Stage) {
+                            $Stage->goal_id = $model->id;
+                            $Stage->id_user = Yii::$app->user->id;
+                            if (! ($flag = $Stage->save(false))) {
+                                $transaction->rollBack();
+                                break;
+                            }
+                        }
                     }
+                    if ($flag) {
+                        $transaction->commit();
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
                 }
             }
         }
 
         return $this->render('update', [
             'model' => $model,
-            'stages' => $Stages,
+            'stages' => $Stages
         ]);
     }
 
@@ -232,28 +251,6 @@ class GoalsController extends ProfileController
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionAddStages()
-    {
-
-        $model = new Stages();
-        if(Yii::$app->request->isPost)
-        {
-            if($model->saveStages())
-            {
-                \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                return ['status'=>true];
-            }
-        }
-        return $this->renderAjax('_stage', ['model'=>$model]);
-    }
-
-    public function actionDeleteStage()
-    {
-        if(Yii::$app->request->isAjax)
-        {
-            Stages::deleteStage(Yii::$app->request->post('stageId'));
-        }
-    }
 
 
 }

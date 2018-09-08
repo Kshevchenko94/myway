@@ -34,7 +34,8 @@
         "tpmanc/yii2-imagick": "*",
         "yiisoft/yii2-imagine": "^2.1",
         "tsanchev/yii2-lightbox2": "2.8.2.2",
-        "bower-asset/lightbox2": "^2.10"
+        "bower-asset/lightbox2": "^2.10",
+        "kidzen/yii2-dynamicform": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
