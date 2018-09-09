@@ -24,7 +24,7 @@ $section = Yii::$app->request->get('section');
         <?php if($section == 'profession') echo $this->render('sections/_profession.php', ['model'=>$model, 'form'=>$form])?>
         <?php if($section == 'skills') echo $this->render('sections/_skills.php', ['model'=>$model, 'form'=>$form])?>
 
-        <? if($section == 'values') echo $this->render('sections/_values.php', ['values'=>$values, 'form'=>$form])?>
+        <?php if($section == 'values') echo $this->render('sections/_values.php', ['values'=>$values, 'form'=>$form])?>
 
         <?php ActiveForm::end(); ?>
 </div>
