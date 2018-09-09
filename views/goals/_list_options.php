@@ -19,11 +19,8 @@ use yii\helpers\Html;
                 <?= Html::button('Проваленное', ['class' => 'btn btn-danger closed_goal', 'data-status'=>'3', 'data-id'=>$model->id]) ?>
                 <?php kartik\popover\PopoverX::end()?>
             <?php endif; ?>
-            <?php if($update):?>
-                <li><a href="<?=Url::to(['goals/view','id'=>$model->id])?>">Просмотр цели</a></li>
-            <?php else:?>
+            <li><a href="<?=Url::to(['goals/view','id'=>$model->id])?>">Просмотр цели</a></li>
             <li><a href="<?=Url::to(['goals/update','id'=>$model->id])?>">Редактировать</a></li>
-            <?php endif;?>
             <li><a href="<?=Url::to(['goals/delete','id'=>$model->id])?>">Удалить</a></li>
         </ul>
     </div>
