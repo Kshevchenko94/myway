@@ -7,7 +7,7 @@ use yii\helpers\Html;
 <div class="news" id="news_<?=$model->id?>" data-id-element="<?=$model->id?>">
     <div class="n_bl">
         <div class="n_bl_1">
-            <div class="n_bl_1_1"><a href="/profile"><img src="<?=($model->user->avatar)? '/web/img/uploads/'.$model->user->avatar:'/web/img/uploads/no_avatar.jpg';?>" alt="" class="new_photo"></a></div>
+            <div class="n_bl_1_1"><a href="/profile"><img src="<?=($model->user->avatar)? '/web/img/uploads/'.$model->user->avatar:'/web/img/icon/nophoto.svg';?>" alt="" class="new_photo"></a></div>
             <div class="n_bl_1_4">
                 <div class="n_bl_1_2"><a href="/profile"><?=$model->user->name?>&nbsp;<?=$model->user->surname?></a></div>
                 <div class="n_bl_1_3"><?=Yii::$app->formatter->asDatetime($model->date_create)?></div>

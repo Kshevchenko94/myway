@@ -12,7 +12,7 @@ use yii\helpers\Url;
 <div class="news">
     <div class="n_bl">
         <div class="n_bl_1">
-            <div class="n_bl_1_1"><a href="/profile"><img src="<?=($model->user->avatar)? '/web/img/uploads/'.$model->user->avatar:'/web/img/avatars/no_avatar.jpg';?>" alt="" class="new_photo"></a></div>
+            <div class="n_bl_1_1"><a href="/profile"><img src="<?=($model->user->avatar)? '/web/img/uploads/'.$model->user->avatar:'/web/img/icon/nophoto.svg';?>" alt="" class="new_photo"></a></div>
             <div class="n_bl_1_4">
                 <div class="n_bl_1_2"><a href="/profile"><?=$model->user->name?>&nbsp;<?=$model->user->surname?></a></div>
                 <div class="n_bl_1_3"><?=Yii::$app->formatter->asDate($model->date_create)?></div>
