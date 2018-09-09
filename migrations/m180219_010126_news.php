@@ -14,7 +14,7 @@ class m180219_010126_news extends Migration
     {
 		$this->createTable('news', [
             'id' => $this->primaryKey(),
-            'text' => $this->text()->notNull(),
+            'text' => $this->text(),
             'date_create' => $this->dateTime()->notNull(),
             'id_goal' => $this->integer()->defaultValue(null),
             'id_user' => $this->integer()->notNull(),
