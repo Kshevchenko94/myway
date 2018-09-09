@@ -47,7 +47,7 @@ use yii\bootstrap\ActiveForm;
     <div class="ag_6"><?=$form->field($model, 'is_public')->checkbox(['label' => 'Не показывать цель людям']);?></div>
     <div class="ag_6"><?=$form->field($model, 'doc')->fileInput()->label(false);?></div>
     <div class="addplan" onclick="$('.div_stages').toggle()">Добавить план достижения цели</div>
-    <?=$this->render('_stage', ['stages'=>$stages, 'form'=>$form, 'subStages'=>$subStages])?>
+    <?=$this->render('_stage', ['model'=>$model,'stages'=>$stages, 'form'=>$form, 'subStages'=>$subStages])?>
     <div class="button add_goal_button"><?=Html::submitButton('Сохранить цель');?></div>
 </div>
 
