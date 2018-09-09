@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="162.4 120 85.2 85.2">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #b9b9b9;
+      }
+    </style>
+  </defs>
+  <g id="noun_1314293_cc" transform="translate(155 112.6)">
+    <g id="Group_3" data-name="Group 3">
+      <g id="Group_2" data-name="Group 2">
+        <path id="Path_7" data-name="Path 7" class="cls-1" d="M78.8,7.4H21.2A13.828,13.828,0,0,0,7.4,21.2V78.8A13.828,13.828,0,0,0,21.2,92.6H78.8A13.828,13.828,0,0,0,92.6,78.8V21.2A13.828,13.828,0,0,0,78.8,7.4Zm-57.6,5H78.8a8.706,8.706,0,0,1,8.7,8.7V44.3H12.4V21.2A8.878,8.878,0,0,1,21.2,12.4ZM78.8,87.6H21.2a8.706,8.706,0,0,1-8.7-8.7V49.4H87.6V78.8A8.878,8.878,0,0,1,78.8,87.6Z"/>
+        <circle id="Ellipse_1" data-name="Ellipse 1" class="cls-1" cx="9" cy="9" r="9" transform="translate(20.2 19.7)"/>
+        <path id="Path_8" data-name="Path 8" class="cls-1" d="M47.7,25.1H78.1a2.5,2.5,0,0,0,0-5H47.7a2.476,2.476,0,0,0-2.5,2.5A2.54,2.54,0,0,0,47.7,25.1Z"/>
+        <path id="Path_9" data-name="Path 9" class="cls-1" d="M47.7,37.9H78.1a2.5,2.5,0,0,0,0-5H47.7a2.476,2.476,0,0,0-2.5,2.5A2.611,2.611,0,0,0,47.7,37.9Z"/>
+      </g>
+    </g>
+  </g>
+</svg>
