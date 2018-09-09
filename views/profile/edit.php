@@ -19,10 +19,10 @@ $section = Yii::$app->request->get('section');
         <?php endif; ?>
         <div class="g_h">Редактирование профиля</div>
         <?php $form = ActiveForm::begin(); ?>
-        <? if($section == 'profile') echo $this->render('sections/_profile.php', ['model'=>$model, 'form'=>$form]);?>
-        <? if($section == 'contacts') echo $this->render('sections/_contacts.php', ['model'=>$model, 'form'=>$form])?>
-        <? if($section == 'profession') echo $this->render('sections/_profession.php', ['model'=>$model, 'form'=>$form])?>
-        <? if($section == 'skills') echo $this->render('sections/_skills.php', ['model'=>$model, 'form'=>$form])?>
+        <?php if($section == 'profile') echo $this->render('sections/_profile.php', ['model'=>$model, 'form'=>$form]);?>
+        <?php if($section == 'contacts') echo $this->render('sections/_contacts.php', ['model'=>$model, 'form'=>$form])?>
+        <?php if($section == 'profession') echo $this->render('sections/_profession.php', ['model'=>$model, 'form'=>$form])?>
+        <?php if($section == 'skills') echo $this->render('sections/_skills.php', ['model'=>$model, 'form'=>$form])?>
 
         <? if($section == 'values') echo $this->render('sections/_values.php', ['values'=>$values, 'form'=>$form])?>
 
