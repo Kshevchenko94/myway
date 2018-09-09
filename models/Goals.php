@@ -126,12 +126,12 @@ class Goals extends ActiveRecord
     }
 
 
-    public static function getCountGoals(array $params=[])
+    public static function getCountGoals($status)
     {
         $allCount = self::find()->where(['id_user'=>Yii::$app->user->id])->count();
-        if($params['status'])
+        if($status)
         {
-            $count = self::find()->where(['status'=>$params['status'],'id_user'=>Yii::$app->user->id])->count();
+            $count = self::find()->where(['status'=>$status,'id_user'=>Yii::$app->user->id])->count();
             $results = [
                 'count'=>$count,
                 'procent'=>MathHelper::getProcent(['number'=>$count,'fromNumber'=>$allCount]),
