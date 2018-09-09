@@ -126,7 +126,7 @@ class Goals extends ActiveRecord
     }
 
 
-    public static function getCountGoals($status)
+    public static function getCountGoals($status=null)
     {
         $allCount = self::find()->where(['id_user'=>Yii::$app->user->id])->count();
         if($status)

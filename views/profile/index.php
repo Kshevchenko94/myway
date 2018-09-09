@@ -29,9 +29,9 @@ $this->registerJsFile('/js/profile.js',['depends' => [\yii\web\JqueryAsset::clas
 		<div class="bar">
             <table style="width:100%; text-align: center; color: #ffffff; font-weight: bold;">
                 <tr style="height: 30px;">
-                    <?php if(\app\models\Goals::getCountGoals(['status'=>2])['count'] > 0):?><td style="width:<?=\app\models\Goals::getCountGoals(['status'=>2])['procent']?>%; background: #00CC99;"><?=\app\models\Goals::getCountGoals(['status'=>2])['count']?></td><?php endif; ?>
-                    <?php if(\app\models\Goals::getCountGoals(['status'=>1])['count'] > 0):?><td style="width:<?=\app\models\Goals::getCountGoals(['status'=>1])['procent']?>%; background: #FFCC33;"><?=\app\models\Goals::getCountGoals(['status'=>1])['count']?></td><?php endif; ?>
-                    <?php if(\app\models\Goals::getCountGoals(['status'=>3])['count'] > 0):?><td style="width:<?=\app\models\Goals::getCountGoals(['status'=>3])['procent']?>%; background: #FF6666;"><?=\app\models\Goals::getCountGoals(['status'=>3])['count']?></td><?php endif; ?>
+                    <?php if(\app\models\Goals::getCountGoals(2)['count'] > 0):?><td style="width:<?=\app\models\Goals::getCountGoals(['status'=>2])['procent']?>%; background: #00CC99;"><?=\app\models\Goals::getCountGoals(2)['count']?></td><?php endif; ?>
+                    <?php if(\app\models\Goals::getCountGoals(1)['count'] > 0):?><td style="width:<?=\app\models\Goals::getCountGoals(['status'=>1])['procent']?>%; background: #FFCC33;"><?=\app\models\Goals::getCountGoals(1)['count']?></td><?php endif; ?>
+                    <?php if(\app\models\Goals::getCountGoals(3)['count'] > 0):?><td style="width:<?=\app\models\Goals::getCountGoals(['status'=>3])['procent']?>%; background: #FF6666;"><?=\app\models\Goals::getCountGoals(3)['count']?></td><?php endif; ?>
                 </tr>
             </table>
         </div>
