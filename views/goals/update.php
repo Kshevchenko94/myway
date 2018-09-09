@@ -8,6 +8,7 @@ use yii\widgets\Pjax;
 /* @var $stages app\models\Stages */
 
 $this->title = 'Редактировать: '.$model->goal;
+$this->registerJsFile('/js/goals.js',['depends' => [\yii\web\JqueryAsset::className()]]);
 
 ?>
 <div class="margin_index1" id="form-input-goal-update">
