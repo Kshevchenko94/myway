@@ -30,10 +30,11 @@ class Substage extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['text', 'id_user', 'id_stage'], 'required'],
+            [['text', 'id_user'], 'required'],
             [['id_user', 'id_stage'], 'integer'],
             [['text'], 'string', 'max' => 255],
             [['id_stage'], 'exist', 'skipOnError' => true, 'targetClass' => Stages::className(), 'targetAttribute' => ['id_stage' => 'id']],
+            [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_user' => 'id']],
         ];
     }
 

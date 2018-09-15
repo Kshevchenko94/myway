@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use app\models\Substage;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Goals */
@@ -9,7 +10,18 @@ use yii\widgets\ActiveForm;
 
 $this->title = 'Цель '.$model->goal;
 $this->registerJsFile('/js/goals.js',['depends' => [\yii\web\JqueryAsset::className()]]);
-
+$this->registerCss('ol {
+/* убираем стандартную нумерацию */
+list-style: none; 
+/* Идентифицируем счетчик и даем ему имя li. Значение счетчика не указано - по умолчанию оно равно 0 */ 
+counter-reset: stages_li; 
+}
+.stages li:before {
+/* Определяем элемент, который будет нумероваться — li. Псевдоэлемент before указывает, что содержимое, вставляемое при помощи свойства content, будет располагаться перед пунктами списка. Здесь же устанавливается значение приращения счетчика (по умолчанию равно 1). */
+counter-increment: stages_li; 
+/* С помощью свойства content выводится номер пункта списка. counters() означает, что генерируемый текст представляет собой значения всех счетчиков с таким именем. Точка в кавычках добавляет разделяющую точку между цифрами, а точка с пробелом добавляется перед содержимым каждого пункта списка */
+content: counters(stages_li,".") ". "; 
+}');
 ?>
 <?php \yii\widgets\Pjax::begin(['id'=>"goal_view_".$model->id, 'enablePushState'=>false])?>
 <div class="margin_index1">
@@ -36,7 +48,7 @@ $this->registerJsFile('/js/goals.js',['depends' => [\yii\web\JqueryAsset::classN
         <!--<div class="g_star">Следить за целью</div>-->
     </div>  
     <div class="g_h_plan">План достижения цели</div>
-    <ol>
+    <ol class="stages">
 	<?php 
 		if($model->stages):
 			foreach($model->stages as $key => $stage):
@@ -46,10 +58,11 @@ $this->registerJsFile('/js/goals.js',['depends' => [\yii\web\JqueryAsset::classN
             <div class="g_plan_1"><?=$stage->title?></div>
             <div class="g_plan_3">До <?=Yii::$app->formatter->asDate($stage->date_finish_stage)?></div>
             <div class="g_plan_2"><?=$stage->description?></div>
-            <div class="g_plan_4">1.1. Подэтап 1</div>
-            <div class="g_plan_4">1.2. Подэтап 2</div>
-            <div class="g_plan_4">1.3. Подэтап 3</div>
-            <div class="g_plan_4">1.4. Подэтап 4</div>
+            <ol>
+                <?php foreach (Substage::findAll(['id_stage'=>$stage->id]) as $subStage):?>
+                <li><?=$subStage->text?></li>
+                <?php endforeach;?>
+            </ol>
         </div>
     </li>
 

@@ -6,6 +6,7 @@ use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $model app\models\Goals */
 /* @var $stages app\models\Stages */
+/* @var $subStages app\models\Stages */
 
 $this->title = 'Редактировать: '.$model->goal;
 $this->registerJsFile('/js/goals.js',['depends' => [\yii\web\JqueryAsset::className()]]);

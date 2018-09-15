@@ -84,9 +84,9 @@ class Stages extends ActiveRecord
         return $this->hasOne(Users::className(), ['id' => 'goal_id']);
     }
 
-    public function getSubstages()
+    public function getSubStages()
     {
-        return $this->hasMany(Substage::className(), ['id' => 'id_stage']);
+        return $this->hasMany(Substage::className(), ['id_stage' => 'id']);
     }
 
     public static function deleteStage($stageId)

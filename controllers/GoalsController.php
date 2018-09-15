@@ -91,34 +91,83 @@ class GoalsController extends ProfileController
         $Stages = [new Stages()];
         $subStages = [[new Substage()]];
 
-        $items = Yii::$app->request->post('Stages');
-        for($i = 0; $i<count($items); $i++){
-            $Stages[$i] = new Stages();
-        }
+        if ($model->load(Yii::$app->request->post())) {
 
-        if ($model->load(Yii::$app->request->post()) && Model::loadMultiple($Stages, Yii::$app->request->post()) && Model::validateMultiple($Stages)) {
+            $model->doc = UploadedFile::getInstance($model, 'doc');
+
+            if ($model->doc) {
+                $docUrl = Yii::$app->storage->saveUploadedFile($model->doc);
+                if($docUrl)
+                {
+                    $model->doc = $docUrl;
+                }
+            }
 
             $model->id_user = Yii::$app->user->id;
-			$model->status = self::ACTIVEGOAL;
-			$model->doc = UploadedFile::getInstance($model, 'doc');
+            $model->status = self::ACTIVEGOAL;
 
-			if ($model->doc) {
-			    $docUrl = Yii::$app->storage->saveUploadedFile($model->doc);
-				if($docUrl)
-				{
-					$model->doc = $docUrl;
-				}
-			}
+            $Stages = \app\models\Model::createMultiple(Stages::classname());
+            Model::loadMultiple($Stages, Yii::$app->request->post());
 
-			if($model->save())
-			{
-                foreach ($Stages as $key=>$Stage) {
-                    $Stage->id_user = Yii::$app->user->id;
-                    $Stage->goal_id = $model->id;
-                    $Stage->save(false);
+            // validate person and houses models
+            $valid = $model->validate();
+
+            $valid = Model::validateMultiple($Stages) && $valid;
+
+            if (isset($_POST['Substage'][0][0])) {
+                foreach ($_POST['Substage'] as $indexStage => $Substages) {
+                    foreach ($Substages as $indexSubstage => $Substage) {
+                        $data['Substage'] = $Substage;
+                        $Substage = new Substage;
+                        $Substage->load($data);
+                        $Substage->id_user = Yii::$app->user->id;
+                        $subStages[$indexStage][$indexSubstage] = $Substage;
+                        $valid = $Substage->validate();
+                    }
                 }
-				return $this->redirect(['view', 'id' => $model->id]);
-			}
+            }
+
+            if ($valid) {
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    if ($flag = $model->save(false)) {
+                        foreach ($Stages as $indexStage => $Stage) {
+
+                            if ($flag === false) {
+                                break;
+                            }
+
+                            $Stage->goal_id = $model->id;
+                            $Stage->id_user = Yii::$app->user->id;
+
+                            if (!($flag = $Stage->save(false))) {
+                                break;
+                            }
+
+                            if (isset($subStages[$indexStage]) && is_array($subStages[$indexStage])) {
+                                foreach ($subStages[$indexStage] as $indexSubstage => $Substage) {
+                                    $Substage->id_stage = $Stage->id;
+                                    if (!($flag = $Substage->save(false))) {
+                                        break;
+                                    }
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                    if ($flag) {
+                        $transaction->commit();
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    } else {
+                        $transaction->rollBack();
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+                }
+            }
         }
         return $this->render('create', [
             'model' => $model,
@@ -151,7 +200,17 @@ class GoalsController extends ProfileController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $Stages = $model->stages;
+        $modelsStage = $model->stages;
+        $modelsSubStage = [];
+        $oldSubStages = [];
+
+        if (!empty($modelsStage)) {
+            foreach ($modelsStage as $indexStage => $modelStage) {
+                $subStages = !empty($modelStage->subStages)? $modelStage->subStages: [new Substage()];
+                $modelsSubStage[$indexStage] = $subStages;
+                $oldSubStages = ArrayHelper::merge(ArrayHelper::index($subStages, 'id'), $oldSubStages);
+            }
+        }
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -163,35 +222,83 @@ class GoalsController extends ProfileController
                 {
                     $model->doc = $docUrl;
                 }
+            }else{
+                $model->doc = $model->oldAttributes['doc'];
             }
 
-            $oldIDs = ArrayHelper::map($Stages, 'id', 'id');
-            $Stages = \app\models\Model::createMultiple(Stages::classname(), $Stages);
-            Model::loadMultiple($Stages, Yii::$app->request->post());
-            $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($Stages, 'id', 'id')));
-            // validate all models
+            // reset
+            $modelsSubStage = [];
+
+            $oldStageIDs = ArrayHelper::map($modelsStage, 'id', 'id');
+            $modelsStage = \app\Models\Model::createMultiple(Stages::classname(), $modelsStage);
+            Model::loadMultiple($modelsStage, Yii::$app->request->post());
+            $deletedStageIDs = array_diff($oldStageIDs, array_filter(ArrayHelper::map($modelsStage, 'id', 'id')));
+
+            // validate person and houses models
             $valid = $model->validate();
-            $valid = Model::validateMultiple($Stages) && $valid;
+            $valid = Model::validateMultiple($modelsStage) && $valid;
+
+            $subStagesIDs = [];
+
+            if (isset($_POST['Substage'][0][0])) {
+                foreach ($_POST['Substage'] as $indexStage => $subStages) {
+                    $subStagesIDs = ArrayHelper::merge($subStagesIDs, array_filter(ArrayHelper::getColumn($subStages, 'id')));
+                    foreach ($subStages as $indexSubStage => $subStage) {
+                        $data['Substage'] = $subStage;
+                        $subStageModel = (isset($subStage['id']) && isset($oldSubStages[$subStage['id']])) ? $oldSubStages[$subStage['id']] : new Substage();
+                        $subStageModel->id_user = Yii::$app->user->id;
+                        $subStageModel->load($data);
+                        $modelsSubStage[$indexStage][$indexSubStage] = $subStageModel;
+                        $valid = $subStageModel->validate();
+                    }
+                }
+            }
+
+            $oldSubStagesIDs = ArrayHelper::getColumn($oldSubStages, 'id');
+            $deletedSubStagesIDs = array_diff($oldSubStagesIDs, $subStagesIDs);
 
             if ($valid) {
-                $transaction = \Yii::$app->db->beginTransaction();
+
+                $transaction = Yii::$app->db->beginTransaction();
                 try {
                     if ($flag = $model->save(false)) {
-                        if (! empty($deletedIDs)) {
-                            Stages::deleteAll(['id' => $deletedIDs]);
+
+                        if (! empty($deletedSubStagesIDs)) {
+                            Substage::deleteAll(['id' => $deletedSubStagesIDs]);
                         }
-                        foreach ($Stages as $Stage) {
-                            $Stage->goal_id = $model->id;
-                            $Stage->id_user = Yii::$app->user->id;
-                            if (! ($flag = $Stage->save(false))) {
-                                $transaction->rollBack();
+
+                        if (! empty($deletedStageIDs)) {
+                            Stages::deleteAll(['id' => $deletedStageIDs]);
+                        }
+
+                        foreach ($modelsStage as $indexStage => $stage) {
+
+                            if ($flag === false) {
                                 break;
+                            }
+
+                            $stage->goal_id = $model->id;
+
+                            if (!($flag = $stage->save(false))) {
+                                break;
+                            }
+
+                            if (isset($modelsSubStage[$indexStage]) && is_array($modelsSubStage[$indexStage])) {
+                                foreach ($modelsSubStage[$indexStage] as $indexSubStage => $SubStage) {
+                                    $SubStage->id_stage = $stage->id;
+                                    if (!($flag = $SubStage->save(false))) {
+                                        break;
+                                    }
+                                }
                             }
                         }
                     }
+
                     if ($flag) {
                         $transaction->commit();
                         return $this->redirect(['view', 'id' => $model->id]);
+                    } else {
+                        $transaction->rollBack();
                     }
                 } catch (Exception $e) {
                     $transaction->rollBack();
@@ -201,7 +308,8 @@ class GoalsController extends ProfileController
 
         return $this->render('update', [
             'model' => $model,
-            'stages' => $Stages
+            'stages' => empty($modelsStage)?[new Stages()]:$modelsStage,
+            'subStages'=>empty($modelsSubStage)?[[new Substage()]]:$modelsSubStage,
         ]);
     }
 

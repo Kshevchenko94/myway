@@ -116,15 +116,6 @@ class Goals extends ActiveRecord
     {
         return $this->hasMany(News::className(), ['id_goal' => 'id'])->andWhere(['section'=>'report'])->orderBy(['id'=>SORT_DESC]);
     }
-	
-	/**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSubstages()
-    {
-        return $this->hasMany(Substage::className(), ['id_stage' => 'goal_id']);
-    }
-
 
     public static function getCountGoals($status=null)
     {

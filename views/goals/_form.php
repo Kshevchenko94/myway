@@ -4,8 +4,6 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
 /* @var $stages app\models\Stages */
-/* @var $subStages app\models\Substage */
-
 
 ?>
 <div class="ag_1"><img src="/web/img/addgoal.jpg" alt=""></div>

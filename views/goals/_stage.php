@@ -19,7 +19,7 @@ $(".dynamicform_wrapper").on(\'afterInsert\', function(e, item) {
 $this->registerJs($js, yii\web\View::POS_END);
 
 ?>
-<div class="div_stages" style="<?=($model->id)? "display: none":null?>" >
+<div class="div_stages">
     <div class="ag_3">План достижения цели</div>
     <div class="container_plan">
 <?php
@@ -29,7 +29,7 @@ DynamicFormWidget::begin(
         'widgetBody' => '.container-items', // required: css class selector
         'widgetItem' => '.item', // required: css class
         'limit' => 10, // the maximum times, an element can be cloned (default 999)
-        'min' => 1, // 0 or 1 (default 1)
+        'min' => 0, // 0 or 1 (default 1)
         'insertButton' => '.add-item', // css class
         'deleteButton' => '.remove-item', // css class
         'model' => $stages[0],
@@ -41,19 +41,20 @@ DynamicFormWidget::begin(
         ],
     ]);
 ?>
+
 <div class="container-items" ><!-- widgetContainer -->
             <?php foreach ($stages as $i => $modelStages): ?>
-        <div class="item panel panel-default" data-stageId="<?=($modelStages->id) ? $modelStages->id:null ?>"><!-- widgetBody -->
-            <div class="panel-body">
+                <button type="button" class="remove-item btn btn-danger btn-xs"><i class="glyphicon glyphicon-minus"></i></button>
+        <div class="item"><!-- widgetBody -->
                 <?php
                 // necessary for update action.
                 if (! $modelStages->isNewRecord) {
                     echo Html::activeHiddenInput($modelStages, "[{$i}]id");
                 }
                 ?>
-                <?=$form->field($modelStages, "[{$i}]title")->textInput(['placeholder'=>'Название этапа'])->label(false)?>
-                <?=$form->field($modelStages, "[{$i}]description")->textarea(['placeholder'=>'Описание этапа'])->label(false)?>
-                <?=$form->field($modelStages, "[{$i}]date_finish_stage")->widget(\kartik\date\DatePicker::className(),
+                <div class="ag_1_2"><?=$form->field($modelStages, "[{$i}]title")->textInput(['placeholder'=>'Название этапа'])->label(false)?></div>
+                <div class="ag_1_2"><?=$form->field($modelStages, "[{$i}]description")->textarea(['placeholder'=>'Описание этапа'])->label(false)?></div>
+                <div class="ag_1_2"><?=$form->field($modelStages, "[{$i}]date_finish_stage")->widget(\kartik\date\DatePicker::className(),
                     [
                         'options' => [
                             'pluginOptions' => [
@@ -61,28 +62,20 @@ DynamicFormWidget::begin(
                                 'startDate'=>date('d-m-Y')
                             ]
                         ]
-                    ])->label(false)?>
-                <?php/*$this->render('_subStages', [
+                    ])->label(false)?></div>
+                <div class="ag_1_2"><?=$this->render('_subStages', [
                     'form' => $form,
                     'indexStage' => $i,
                     'subStages' => $subStages[$i],
-                ]);*/
-                ?>
+                ]);
+                    ?></div>
 
-            </div>
-            <div class="panel-footer">
-                <div class="pull-right">
-                    <button type="button" class="add-item btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"></i></button>
-                    <button type="button" class="remove-item btn btn-danger btn-xs"><i class="glyphicon glyphicon-minus"></i></button>
-                </div>
-                <div class="clearfix"></div>
-            </div>
         </div>
         <?php endforeach; ?>
 
 
     </div>
-        <button type="button" class="add-stages-for-update btn btn-primary btn-block hidden">Добавить этапы</button>
+        <div class="ag_2_1 add-item">Добавить этап</div>
 <?php
 DynamicFormWidget::end();
 
