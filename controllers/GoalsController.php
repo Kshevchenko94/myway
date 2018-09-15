@@ -246,7 +246,6 @@ class GoalsController extends ProfileController
                     foreach ($subStages as $indexSubStage => $subStage) {
                         $data['Substage'] = $subStage;
                         $subStageModel = (isset($subStage['id']) && isset($oldSubStages[$subStage['id']])) ? $oldSubStages[$subStage['id']] : new Substage();
-                        $subStageModel->id_user = Yii::$app->user->id;
                         $subStageModel->load($data);
                         $modelsSubStage[$indexStage][$indexSubStage] = $subStageModel;
                         $valid = $subStageModel->validate();
@@ -286,6 +285,7 @@ class GoalsController extends ProfileController
                             if (isset($modelsSubStage[$indexStage]) && is_array($modelsSubStage[$indexStage])) {
                                 foreach ($modelsSubStage[$indexStage] as $indexSubStage => $SubStage) {
                                     $SubStage->id_stage = $stage->id;
+                                    $SubStage->id_user = Yii::$app->user->id;
                                     if (!($flag = $SubStage->save(false))) {
                                         break;
                                     }
