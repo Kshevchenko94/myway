@@ -278,6 +278,7 @@ class GoalsController extends ProfileController
                             }
 
                             $stage->goal_id = $model->id;
+                            $stage->id_user = Yii::$app->user->id;
 
                             if (!($flag = $stage->save(false))) {
                                 break;
