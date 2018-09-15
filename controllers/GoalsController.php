@@ -230,7 +230,7 @@ class GoalsController extends ProfileController
             $modelsSubStage = [];
 
             $oldStageIDs = ArrayHelper::map($modelsStage, 'id', 'id');
-            $modelsStage = \app\Models\Model::createMultiple(Stages::classname(), $modelsStage);
+            $modelsStage = \app\models\Model::createMultiple(Stages::classname(), $modelsStage);
             Model::loadMultiple($modelsStage, Yii::$app->request->post());
             $deletedStageIDs = array_diff($oldStageIDs, array_filter(ArrayHelper::map($modelsStage, 'id', 'id')));
 
