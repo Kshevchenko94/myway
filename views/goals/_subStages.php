@@ -5,11 +5,11 @@ use yii\helpers\Html;
 DynamicFormWidget::begin(
     [
         'widgetContainer' => 'dynamicform_inner', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
-        'widgetBody' => '.container-substage', // required: css class selector
-        'widgetItem' => '.substage_item', // required: css class
+        'widgetBody' => '.container-subStage', // required: css class selector
+        'widgetItem' => '.subStage_item', // required: css class
         'limit' => 10, // the maximum times, an element can be cloned (default 999)
         'min' => 0, // 0 or 1 (default 1)
-        'insertButton' => '.add-substage', // css class
+        'insertButton' => '.add-subStage', // css class
         'deleteButton' => '.remove-substage', // css class
         'model' => $subStages[0],
         'formId' => 'form-input-goal',
@@ -18,9 +18,9 @@ DynamicFormWidget::begin(
         ],
     ]);
 ?>
-    <div class="container-substage" ><!-- widgetContainer -->
+    <div class="container-subStage" ><!-- widgetContainer -->
         <?php foreach ($subStages as $i => $modelSubStages): ?>
-            <div class="substage_item"><!-- widgetBody -->
+            <div class="subStage_item"><!-- widgetBody -->
                     <?php
                     // necessary for update action.
                     if (! $modelSubStages->isNewRecord) {
@@ -33,6 +33,7 @@ DynamicFormWidget::begin(
             </div>
         <?php endforeach; ?>
     </div>
-    <div class="ag_1_3 add-substage">Добавить подэтап</div>
+    <div class="ag_1_3 add-subStage">Добавить подэтап</div>
 <?php
 DynamicFormWidget::end();
+?>

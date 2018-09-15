@@ -223,7 +223,17 @@ class GoalsController extends ProfileController
                     $model->doc = $docUrl;
                 }
             }else{
-                $model->doc = $model->oldAttributes['doc'];
+                if(Yii::$app->request->post('Goals')['isDeletePhoto'])
+                {
+
+                    if(Yii::$app->storage->deleteUploadedFile($model->doc))
+                    {
+                        $model->doc = null;
+                    }
+                }else
+                {
+                    $model->doc = $model->oldAttributes['doc'];
+                }
             }
 
             // reset

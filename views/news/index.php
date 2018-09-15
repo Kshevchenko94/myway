@@ -21,6 +21,7 @@ try {
         'summary' => false,
     ]);
 } catch (Exception $e) {
+    echo $e->getMessage();
 }
 \yii\widgets\Pjax::end();
 ?>

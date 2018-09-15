@@ -72,9 +72,20 @@ $(function(){
         });
     });
 
+    $(document).on('click','#delete_photo_update_goal',function(){
+        var opacity = $(this).siblings('img').css('opacity');
+        if( opacity != 0.3)
+        {
+            $(this).siblings('img').fadeTo(600,0.3);
+            $(this).removeClass('glyphicon-remove').html("Отменить");
+            $('#goals-isdeletephoto').val(true);
+        }else if(opacity == 0.3)
+        {
+            $(this).siblings('img').fadeTo(600,1);
+            $(this).addClass('glyphicon-remove').html('');
+            $('#goals-isdeletephoto').val(false);
+        }
 
-
-
-
+    });
 
 });

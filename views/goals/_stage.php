@@ -44,8 +44,9 @@ DynamicFormWidget::begin(
 
 <div class="container-items" ><!-- widgetContainer -->
             <?php foreach ($stages as $i => $modelStages): ?>
-                <button type="button" class="remove-item btn btn-danger btn-xs"><i class="glyphicon glyphicon-minus"></i></button>
+
         <div class="item"><!-- widgetBody -->
+            <button type="button" class="remove-item btn btn-danger btn-xs"><i class="glyphicon glyphicon-minus"></i></button>
                 <?php
                 // necessary for update action.
                 if (! $modelStages->isNewRecord) {

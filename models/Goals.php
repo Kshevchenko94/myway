@@ -27,6 +27,9 @@ use app\components\MathHelper;
  */
 class Goals extends ActiveRecord
 {
+
+    public $isDeletePhoto = false;
+
     /**
      * @inheritdoc
      */
@@ -114,7 +117,7 @@ class Goals extends ActiveRecord
 
     public function getReports()
     {
-        return $this->hasMany(News::className(), ['id_goal' => 'id'])->andWhere(['section'=>'report'])->orderBy(['id'=>SORT_DESC]);
+        return $this->hasMany(News::className(), ['id_goal' => 'id'])->where(['section'=>'report', 'id_goal'=>Yii::$app->request->get('id')])->orderBy(['id'=>SORT_DESC]);
     }
 
     public static function getCountGoals($status=null)

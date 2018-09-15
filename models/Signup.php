@@ -43,12 +43,13 @@ class Signup extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'surname',  'password', 'email'], 'required', 'message'=>'Поле обязательное для заполнения.'],
+            [['name', 'surname',  'password', 'email'], 'required'],
             [['income', 'city_id', 'status'], 'integer'],
             [['date_birth'], 'safe'],
             [['name', 'surname', 'password', 'avatar', 'sex', 'telephone', 'vk', 'instagram', 'facebook', 'place_job', 'position', 'skills', 'email'], 'string', 'max' => 255],
-            [['email'], 'unique', 'message'=>'Такая почта уже зарегистрированна.'],
-            ['email', 'email', 'message'=>'Некорректная почта.'],
+            [['email'], 'unique'],
+            [['password'], 'string','min'=>8],
+            ['email', 'email'],
         ];
     }
 

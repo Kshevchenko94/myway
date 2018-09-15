@@ -53,7 +53,8 @@ use yii\bootstrap\ActiveForm;
         <div class="ag_addphoto"><img src="/web/img/icon/addphoto.svg" alt=""></div>
 
     <?php  if(!$model->isNewRecord && $model->doc): ?>
-        <div><span id="delete_photo_update_goal" class="glyphicon glyphicon-remove"></span><?=Html::img('/web/img/uploads/'.$model->doc)?></div>
+        <div><span id="delete_photo_update_goal" class="glyphicon glyphicon-remove"></span><?=Html::img('/web/img/uploads/'.$model->doc, ['width'=>'256px','height'=>'100px'])?></div>
+        <?=$form->field($model, 'isDeletePhoto')->hiddenInput()->label(false)?>
     <?php endif; ?>
 
     </div>

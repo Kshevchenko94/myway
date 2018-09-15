@@ -11,15 +11,11 @@ use app\models\Substage;
 $this->title = 'Цель '.$model->goal;
 $this->registerJsFile('/js/goals.js',['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerCss('ol {
-/* убираем стандартную нумерацию */
 list-style: none; 
-/* Идентифицируем счетчик и даем ему имя li. Значение счетчика не указано - по умолчанию оно равно 0 */ 
 counter-reset: stages_li; 
 }
 .stages li:before {
-/* Определяем элемент, который будет нумероваться — li. Псевдоэлемент before указывает, что содержимое, вставляемое при помощи свойства content, будет располагаться перед пунктами списка. Здесь же устанавливается значение приращения счетчика (по умолчанию равно 1). */
 counter-increment: stages_li; 
-/* С помощью свойства content выводится номер пункта списка. counters() означает, что генерируемый текст представляет собой значения всех счетчиков с таким именем. Точка в кавычках добавляет разделяющую точку между цифрами, а точка с пробелом добавляется перед содержимым каждого пункта списка */
 content: counters(stages_li,".") ". "; 
 }');
 ?>
@@ -43,10 +39,10 @@ content: counters(stages_li,".") ". ";
 	<?php if($model->doc):?>
     <div class="g_g4"><a data-lightbox="<?=$model->doc?>" href="/web/img/uploads/<?=$model->doc?>"><img src="/web/img/uploads/<?=$model->doc?>" alt=""></a></div>
 	<?php endif ?>
-    <div class="g_g5">  
-        <div class="g_like">123</div>
-        <!--<div class="g_star">Следить за целью</div>-->
-    </div>  
+    <div class="g_g5">
+        <!--<div class="g_like">123</div>
+        <div class="g_star">Следить за целью</div>-->
+    </div>
     <div class="g_h_plan">План достижения цели</div>
     <ol class="stages">
 	<?php 
@@ -87,15 +83,12 @@ content: counters(stages_li,".") ". ";
     <?php ActiveForm::end(); ?>
     </div>
 </div>
-
-
     <div class="goal_post">
-        <div class="goal_day">2 День</div>
+        <!--<div class="goal_day">2 День</div>-->
         <?php foreach ($model->reports as $values):?>
             <?=$this->render('@app/views/news/_post', ['model'=>$values])?>
         <?php endforeach;?>
 
     </div>
-
 </div>
 <?php \yii\widgets\Pjax::end()?>

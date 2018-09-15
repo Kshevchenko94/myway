@@ -8,6 +8,7 @@
 
 use yii\helpers\Url;
 
+if(!empty($model->goal)):
 ?>
 <div class="news">
     <div class="n_bl">
@@ -25,7 +26,7 @@ use yii\helpers\Url;
             </ul>
         </div>
         <div class="post_addgoal"><a href="<?=Url::toRoute(['goals/view','id'=>$model->goal->id])?>">
-                <div class="post_addgoal_1"><img src="img/icon/newgoal.svg" alt=""></div>
+                <div class="post_addgoal_1"><img src="/web/img/icon/newgoal.svg" alt=""></div>
                 <div class="post_addgoal_6">Новая цель!</div>
                 <div class="post_addgoal_2"><?=$model->goal->goal?></div>
                 <div class="post_addgoal_3"><?=Yii::$app->formatter->asDate($model->goal->date_finish_goal)?> </div>
@@ -33,3 +34,4 @@ use yii\helpers\Url;
         </div>
     </div>
 </div>
+<?php endif; ?>

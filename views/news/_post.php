@@ -12,7 +12,7 @@ use yii\helpers\Html;
                 <div class="n_bl_1_2"><a href="/profile"><?=$model->user->name?>&nbsp;<?=$model->user->surname?></a></div>
                 <div class="n_bl_1_3"><?=Yii::$app->formatter->asDatetime($model->date_create)?></div>
             </div>
-            <?php if($model->text && $model->id_goal && !$model->section):?>
+            <?php if($model->text && $model->id_goal && $model->section):?>
                 <?=$this->render('_post_and_goal',['model'=>$model])?>
             <?php endif;?>
         </div>
