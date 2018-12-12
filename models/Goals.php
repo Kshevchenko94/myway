@@ -20,6 +20,7 @@ use app\components\MathHelper;
  * @property int $is_public
  * @property string $need_goal
  * @property string $doc
+ * @property int $is_hide
  *
  * @property CriteriesGoals $categoryGoal
  * @property Users $user
@@ -46,7 +47,7 @@ class Goals extends ActiveRecord
         return [
             [['goal', 'date_finish_goal', 'criterion_fifnish_goal', 'id_user','priority_goal', 'is_public', 'need_goal', 'category_goal'], 'required', 'message'=>'Поле обязательное для заполнения'],
             [['date_finish_goal'], 'safe'],
-            [['id_user', 'category_goal', 'priority_goal', 'status', 'is_public'], 'integer'],
+            [['id_user', 'category_goal', 'priority_goal', 'status', 'is_public', 'is_hide'], 'integer'],
             [['goal', 'criterion_fifnish_goal', 'need_goal', 'doc'], 'string', 'max' => 255],
             [['category_goal'], 'exist', 'skipOnError' => true, 'targetClass' => CriteriesGoals::className(), 'targetAttribute' => ['category_goal' => 'id']],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['id_user' => 'id']],
@@ -142,6 +143,28 @@ class Goals extends ActiveRecord
     public static function getSelectGoals()
     {
         return self::find()->select(['id','goal'])->where(['id_user'=>Yii::$app->user->id])->asArray()->all();
+    }
+
+    public static function hideStage($id_stage)
+    {
+        $stage = self::findOne(['id'=>$id_stage]);
+
+        if($stage->is_hide === false)
+        {
+            $stage->is_hide = 1;
+            return $stage->save();
+        }
+    }
+
+    public static function showStage($id_stage)
+    {
+        $stage = self::findOne(['id'=>$id_stage]);
+
+        if($stage->is_hide === true)
+        {
+            $stage->is_hide = 0;
+            return $stage->save();
+        }
     }
 
 }

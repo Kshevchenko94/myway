@@ -370,6 +370,19 @@ class GoalsController extends ProfileController
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
+    public function actionToggleGoal($id_goal)
+    {
+        if(Yii::$app->request->isAjax)
+        {
+            if($id_goal)
+            {
+                Goals::showStage($id_goal);
+            }else{
+                Goals::hideStage($id_goal);
+            }
+        }
+    }
+
 
 
 }
